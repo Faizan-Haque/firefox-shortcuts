@@ -9,6 +9,12 @@
 	"icons": { 
 		"72": "icon/icon.png" 
 	},
+	"browser_specific_settings": {
+		"gecko": {
+		"id": "tab_shortcuts@de.v",
+		"strict_min_version": "109.0"
+    	}
+  	},
 	"background": {
 		"scripts": ["shortcuts.js"]
 	},
