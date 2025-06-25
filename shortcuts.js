@@ -1,64 +1,41 @@
 browser.commands.onCommand.addListener(function(command) {
-
-	const windowTabs = browser.tabs.query({
-		"currentWindow": true
-	});
-
-	windowTabs.then(handle.bind(null, command), error);
+    const windowTabs = browser.tabs.query({ currentWindow: true });
+    windowTabs.then(handle.bind(null, command), error);
 });
 
 function handle(command, windowTabs) {
-	if(command == "first_tab") {
-		browser.tabs.update(windowTabs[0].id, {
-			active: true
-		});
-	}
-	if(command == "second_tab" && windowTabs.length > 1) {
-		browser.tabs.update(windowTabs[1].id, {
-			active: true
-		});
-	}
-	if(command == "third_tab" && windowTabs.length > 2) {
-		browser.tabs.update(windowTabs[2].id, {
-			active: true
-		});
-	}
-	if(command == "fouth_tab" && windowTabs.length > 3) {
-		browser.tabs.update(windowTabs[3].id, {
-			active: true
-		});
-	}
-	if(command == "fifth_tab" && windowTabs.length > 4) {
-		browser.tabs.update(windowTabs[4].id, {
-			active: true
-		});
-	}
-	if(command == "sixth_tab" && windowTabs.length > 5) {
-		browser.tabs.update(windowTabs[5].id, {
-			active: true
-		});
-	}
-	if(command == "seventh_tab" && windowTabs.length > 6) {
-		browser.tabs.update(windowTabs[6].id, {
-			active: true
-		});
-	}
-	if(command == "eighth_tab" && windowTabs.length > 7) {
-		browser.tabs.update(windowTabs[7].id, {
-			active: true
-		});
-	}
-	if(command == "last_tab") {
-		browser.tabs.update(windowTabs[windowTabs.length - 1].id, {
-			active: true
-		});
-	}
-	
-	if(command == "close-q") {
-		
-	}
+    const tabCommands = [
+        "first_tab",
+        "second_tab",
+        "third_tab",
+        "fourth_tab",
+        "fifth_tab",
+        "sixth_tab",
+        "seventh_tab",
+        "eighth_tab"
+    ];
+
+    const index = tabCommands.indexOf(command);
+    if (index !== -1 && windowTabs.length > index) {
+        browser.tabs.update(windowTabs[index].id, { active: true });
+        return;
+    }
+
+    if (command === "previous_tab") {
+        const activeTabIndex = windowTabs.findIndex(tab => tab.active);
+        const nextIndex = (activeTabIndex - 1 + windowTabs.length) % windowTabs.length;
+        browser.tabs.update(windowTabs[nextIndex].id, { active: true });
+        return;
+    }
+
+	if (command === "next_tab") {
+        const activeTabIndex = windowTabs.findIndex(tab => tab.active);
+        const nextIndex = (activeTabIndex + 1) % windowTabs.length;
+        browser.tabs.update(windowTabs[nextIndex].id, { active: true });
+        return;
+    }
 }
 
 function error(msg) {
-	console.log("Error: " + msg);
+    console.log("Error: " + msg);
 }
